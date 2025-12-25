@@ -10,7 +10,7 @@ Dependencies:
 - luasocket
 - dkjson
 
-Install: ``luarocks install lest``
+Install: ``luarocks install lestserver``
 
 ## Docs
 

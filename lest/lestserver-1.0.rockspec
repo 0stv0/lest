@@ -1,4 +1,4 @@
-package = "lest"
+package = "lestserver"
 version = "1.0"
 
 source = {
