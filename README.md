@@ -63,3 +63,13 @@ sv:addRoute('/register', 'POST', function(req)
     };
 end, middle);
 ```
+
+---
+
+Request Interface
+
+| Name | Description |
+|----------|-----------|
+| Wartość A1 | Wartość B1 | 
+| Wartość A2 | Wartość B2 | 
+| Wartość A3 | Wartość B3 | 
