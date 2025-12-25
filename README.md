@@ -70,6 +70,6 @@ Request Interface
 
 | Name | Description |
 |----------|-----------|
-| Wartość A1 | Wartość B1 | 
-| Wartość A2 | Wartość B2 | 
-| Wartość A3 | Wartość B3 | 
+| headers | [[key] = value] All headers from request | 
+| body | [[key] = value] Body from request | 
+| params | [[key] = value] All parameters after ? in url | 
