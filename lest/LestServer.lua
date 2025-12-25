@@ -1,6 +1,6 @@
 local socket    = require("socket");
 local json      = require('dkjson');
-local functions = require('Funtions');
+local functions = require('LestFuntions');
 
 ---@type table
 Server         = {};
@@ -9,6 +9,7 @@ Server.__index = Server;
 ---@type function
 ---@param code string
 ---@param body table
+---@return string
 local function writeResponse(code, body)
     return "HTTP/1.1 " .. code .. "\r\n" ..
     "Content-Type: application/json\r\n" ..
@@ -20,6 +21,7 @@ end
 ---@type function
 ---@param path string
 ---@param array table
+---@return table
 local function findRoute(path, array)
     local found = nil;
     for i = 1, #array, 1 do
@@ -34,6 +36,7 @@ end
 
 ---@type function
 ---@param port number
+---@return table
 function Server:create(port)
     local obj = {
         port   = port,
@@ -47,11 +50,13 @@ end
 ---@param path string
 ---@param method string
 ---@param handler function
-function Server:addRoute(path, method, handler)
+---@param middle function | nil
+function Server:addRoute(path, method, handler, middle)
     self.routes[#self.routes + 1] = {
         path    = path,
         method  = method,
-        handler = handler
+        handler = handler,
+        middle  = middle
     };
 end
 
@@ -120,15 +125,24 @@ function Server:listen(cb)
                 end
             end
 
-            -- Middleware
-            -- TODO
-
-            -- Routing
-            client:send(writeResponse("200 OK", route.handler({
+            -- Request Interface
+            local req = {
                 headers = headers,
                 body    = json.decode(body),
                 params  = params
-            })));
+            };
+
+            -- Middleware
+            if route.middle ~= nil then
+                local data = route.middle(req);
+                if not data.valid then
+                    client:send(writeResponse("200 OK", data.res));
+                    client:close();
+                end
+            end
+
+            -- Routing
+            client:send(writeResponse("200 OK", route.handler(req)));
             client:close();
         end
 
