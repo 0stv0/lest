@@ -56,4 +56,10 @@ local function middle(req)
         res   = {}
     };
 end
+
+sv:addRoute('/register', 'POST', function(req)
+    return {
+        message = "registered"
+    };
+end, middle);
 ```
